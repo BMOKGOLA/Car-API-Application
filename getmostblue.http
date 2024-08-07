@@ -1,0 +1,3 @@
+### Get the town with the most blue cars
+GET http://localhost:3010/cars/mostBlueCars
+Accept: application/json

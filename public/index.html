@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car CRUD API</title>
+    <!-- Materialize CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <!-- AlpineJS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="index.js"></script>
+    <!-- Materialize JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    
+</head>
+<body>
+    const apiKey = process.env.API_KEY;
+    <div x-data="carApp()" x-init="init()" class="container">
+        
+
+        <style>
+            body {
+                background-color:Yellow;
+                font-family: 'Roboto', sans-serif;
+            }
+            .section {
+                margin: 2rem 0;
+            }
+            .header {
+                background-color: #2196f3;
+                color: white;
+                padding: 1rem;
+            }
+            .header h1 {
+                margin: 0;
+            }
+            .btn-custom {
+                background-color: #4caf50 !important;
+            }
+            .secondary-content.btn.red {
+                margin-left: 1rem;
+            }
+        </style>
+    </head>
+    <body x-data="carApp()">
+    
+        <div class="header">
+            <h1 class="center-align">CAR API APP</h1>
+        </div>
+    
+        <div class="container">
+            <div class="section">
+                <h2>Create Car</h2>
+                <form @submit.prevent="addCar" class="col s12">
+                    <div class="input-field col s6">
+                        <input x-model="newCar.color" id="color" type="text" class="validate" required>
+                        <label for="color">Color</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input x-model="newCar.make" id="make" type="text" class="validate" required>
+                        <label for="make">Make</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input x-model="newCar.model" id="model" type="text" class="validate" required>
+                        <label for="model">Model</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input x-model="newCar.reg_number" id="reg_number" type="text" class="validate" required>
+                        <label for="reg_number">Reg Number</label>
+                    </div>
+                    <button type="submit" class="btn waves-effect waves-light btn-custom">Add Car</button>
+                </form>
+            </div>
+    
+            <div class="section">
+                <h2>Car List</h2>
+                <ul class="collection">
+                    <template x-for="car in cars" :key="car.reg_number">
+                        <li class="collection-item">
+                            <span x-text="`${car.color} ${car.make} ${car.model} (${car.reg_number})`"></span>
+                            <a href="#" @click.prevent="deleteCar(car.reg_number)" class="secondary-content btn red">Delete</a>
+                        </li>
+                    </template>
+                </ul>
+            </div>
+    
+            <div class="section">
+                <h2>Check the Town with the Most Blue Cars</h2>
+                <button @click="getMostBlueCars" class="btn waves-effect waves-light btn-custom" @mouseover="changeButtonColor" @mouseout="resetButtonColor">Get Town with Most Blue Cars</button>
+                <div class="section" x-text="mostBlueCarsTown"></div>
+            </div>
+    
+        </div>
+    <script>
+        function carApp() {
+            return {
+                cars: [],
+                newCar: { color: '', make: '', model: '', reg_number: '' },
+                mostBlueCarsTown: '',
+
+                async fetchCars() {
+                    const response = await axios.get('http://localhost:3010/cars');
+                    this.cars = response.data;
+                },
+
+                async addCar() {
+                    await axios.post('http://localhost:3010/cars', this.newCar);
+                    this.newCar = { color: '', make: '', model: '', reg_number: '' };
+                    this.fetchCars();
+                },
+
+                async deleteCar(reg_number) {
+                    await axios.delete(`http://localhost:3010/cars/${reg_number}`);
+                    this.fetchCars();
+                },
+
+                async getMostBlueCars() {
+                    const response = await axios.get('http://localhost:3010/cars/mostBlueCars');
+                    this.mostBlueCarsTown = response.data.mostBlueCarsTown;
+                },
+
+                async init() {
+                    await this.fetchCars();
+                }
+            }
+        }
+    </script>
+</body>
+</html>
+

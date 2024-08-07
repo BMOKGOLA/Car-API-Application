@@ -1,0 +1,13 @@
+
+### Update an existing car
+PUT http://localhost:301o/cars/CJ 12345
+Content-Type: application/json
+
+{
+  "color": "blue",
+  "make": "Honda",
+  "model": "Civic",
+  "reg_number": "CJ 12345"
+}
+
+###

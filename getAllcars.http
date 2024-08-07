@@ -1,0 +1,5 @@
+### Get all cars
+GET http://localhost:3010/cars
+Accept: application/json
+
+###

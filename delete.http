@@ -1,0 +1,4 @@
+### Delete a car
+DELETE http://localhost:3010/cars/CJ%2012345
+
+###

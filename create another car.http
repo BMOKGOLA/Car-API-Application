@@ -1,0 +1,12 @@
+### Create another car
+POST http://localhost:3010/cars \
+Content-Type: application/json
+
+{
+  "color": "blue",
+  "make": "Toyota",
+  "model": "Yaris",
+  "reg_number": "CY 67890"
+}
+
+###
